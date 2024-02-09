@@ -170,12 +170,20 @@ def handler(event):
         }
 
     if "dino_model_name" in payload.keys():
-      with open('newmask.png', 'wb') as f:
-        f.write(base64.b64decode(response.json()['masks'][2]))
+      dilated_mask = send_post_request('sam/dilate-mask', {
+        "input_image": payload["input_image"],
+        "mask": response.json()['masks'][2],
+        "dilate_amount": 10
+      })
+      # with open('newmask.png', 'wb') as f:
+      #   f.write(base64.b64decode(dilated_mask.json()['mask']))
+
+      return dilated_mask.json()['mask']
 
     if "prompt" in payload.keys():
-      with open('output.png', 'wb') as f:
-        f.write(base64.b64decode(response.json()['images'][0]))
+      return response.json()['images'][0]
+      # with open('output.png', 'wb') as f:
+      #   f.write(base64.b64decode(response.json()['images'][0]))
 
     return response.json()
 
