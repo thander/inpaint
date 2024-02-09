@@ -1,0 +1,7 @@
+# Required Python packages get listed here, one per line.
+# Reccomended to lock the version number to avoid unexpected changes.
+
+runpod
+Pillow
+requests
+python-dotenv
