@@ -178,10 +178,10 @@ def handler(event):
       # with open('newmask.png', 'wb') as f:
       #   f.write(base64.b64decode(dilated_mask.json()['mask']))
 
-      return dilated_mask.json()['mask']
+      return {'images': [dilated_mask.json()['mask']]}
 
     if "prompt" in payload.keys():
-      return response.json()['images'][0]
+      return {'images': [response.json()['images'][0]]}
       # with open('output.png', 'wb') as f:
       #   f.write(base64.b64decode(response.json()['images'][0]))
 

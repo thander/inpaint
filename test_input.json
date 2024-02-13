@@ -11,8 +11,8 @@
                 "sam_positive_points": [],
                 "sam_negative_points": [],
                 "dino_enabled": true,
-                "dino_model_name": "GroundingDINO_SwinT_OGC (694MB)",
-                "dino_text_prompt": "full face",
+                "dino_model_name": "GroundingDINO_SwinB (938MB)",
+                "dino_text_prompt": "face",
                 "dino_box_threshold": 0.3,
                 "dino_preview_checkbox": false,
                 "dino_preview_boxes_selection": []
