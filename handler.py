@@ -173,7 +173,7 @@ def handler(event):
       dilated_mask = send_post_request('sam/dilate-mask', {
         "input_image": payload["input_image"],
         "mask": response.json()['masks'][2],
-        "dilate_amount": 10
+        "dilate_amount": 7
       })
       # with open('newmask.png', 'wb') as f:
       #   f.write(base64.b64decode(dilated_mask.json()['mask']))
