@@ -132,6 +132,30 @@ def pic_replace(payload, model):
 # ---------------------------------------------------------------------------- #
 #                                RunPod Handler                                #
 # ---------------------------------------------------------------------------- #
+
+def add_mask(payload):
+  generate_mask_req = send_post_request('sam/sam-predict', {
+    "sam_model_name": "sam_vit_h_4b8939.pth",
+    "input_image": payload["init_images"][0],
+    "sam_positive_points": [],
+    "sam_negative_points": [],
+    "dino_enabled": True,
+    "dino_model_name": "GroundingDINO_SwinB (938MB)",
+    "dino_text_prompt": "face",
+    "dino_box_threshold": 0.4,
+    "dino_preview_checkbox": False,
+    "dino_preview_boxes_selection": [],
+    "dilate_amount": 1
+  })
+
+  dilated_mask_req = send_post_request('sam/dilate-mask', {
+    "input_image": payload["init_images"][0],
+    "mask": generate_mask_req.json()['masks'][2],
+    "dilate_amount": payload["dilate_amount"]
+  })
+
+  payload['mask'] = dilated_mask_req.json()['mask']
+
 def handler(event):
     validated_api = validate_api(event)
 
@@ -155,6 +179,10 @@ def handler(event):
     # set model
     send_post_request('sdapi/v1/options', {"sd_model_checkpoint": validated_api['validated_input']['model']})
 
+    if "prompt" in payload.keys():
+      if ("mask" not in payload.keys()) or ("mask" in payload.keys() and payload["mask"] == ""):
+        add_mask(payload)
+
     try:
         logger.log(f'Sending {method} request to: /{endpoint}')
 
@@ -175,15 +203,11 @@ def handler(event):
         "mask": response.json()['masks'][2],
         "dilate_amount": payload["dilate_amount"] or 0
       })
-      # with open('newmask.png', 'wb') as f:
-      #   f.write(base64.b64decode(dilated_mask.json()['mask']))
 
       return {'images': [dilated_mask.json()['mask']]}
 
     if "prompt" in payload.keys():
       return {'images': [response.json()['images'][0]]}
-      # with open('output.png', 'wb') as f:
-      #   f.write(base64.b64decode(response.json()['images'][0]))
 
     return response.json()
 

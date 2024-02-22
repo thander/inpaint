@@ -23,6 +23,11 @@ IMG2IMG_SCHEMA = {
         'required': False,
         'default': -1
     },
+    'dilate_amount': {
+        'type': str,
+        'required': False,
+        'default': 1    
+    },
     'subseed_strength': {
         'type': int,
         'required': False,
