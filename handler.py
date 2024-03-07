@@ -148,13 +148,14 @@ def add_mask(payload):
     "dilate_amount": 1
   })
 
-  dilated_mask_req = send_post_request('sam/dilate-mask', {
-    "input_image": payload["init_images"][0],
-    "mask": generate_mask_req.json()['masks'][2],
-    "dilate_amount": payload["dilate_amount"]
-  })
+  # dilated_mask_req = send_post_request('sam/dilate-mask', {
+  #   "input_image": payload["init_images"][0],
+  #   "mask": generate_mask_req.json()['masks'][2],
+  #   "dilate_amount": payload["dilate_amount"]
+  # })
 
-  payload['mask'] = dilated_mask_req.json()['mask']
+  # payload['mask'] = dilated_mask_req.json()['mask']
+  payload['mask'] = generate_mask_req.json()['masks'][2]
 
 def handler(event):
     validated_api = validate_api(event)
